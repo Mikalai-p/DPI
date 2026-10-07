@@ -1,0 +1,575 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wireframe Visual Guide - Car Service App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #1a1a1a;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.4;
+        }
+
+        /* screen wrapper */
+        .screen {
+            background: #F5F5F5;
+            margin: 32px auto;
+            width: 100%;
+            max-width: 1920px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        /* container = 1400px centered */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            box-shadow: 0 0 0 1px #E0E0E0;
+        }
+
+        /* general spacing */
+        .section {
+            padding: 24px 24px;
+            border-bottom: 1px solid #EEEEEE;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        /* headers, text */
+        h1, h2, h3, h4 {
+            font-weight: 500;
+            color: #111111;
+        }
+
+        .wireframe-text {
+            color: #333;
+            font-size: 14px;
+        }
+
+        /* cards */
+        .service-card {
+            background: #FFFFFF;
+            border: 1px solid #E0E0E0;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            transition: all 0.1s ease;
+        }
+
+        .service-card:last-child {
+            margin-bottom: 0;
+        }
+
+        /* two-column layout */
+        .two-columns {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        .col-left {
+            flex: 2;
+        }
+        .col-right {
+            flex: 1;
+        }
+
+        /* map placeholder */
+        .map-placeholder {
+            background: #E8E8E8;
+            border-radius: 16px;
+            height: 420px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: #666;
+            font-size: 14px;
+            border: 1px dashed #AAAAAA;
+            position: relative;
+        }
+
+        .marker {
+            width: 24px;
+            height: 24px;
+            background: #9E9E9E;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        /* filter row */
+        .filter-row {
+            display: flex;
+            gap: 32px;
+            padding: 12px 0;
+            border-bottom: 1px solid #F0F0F0;
+            margin-bottom: 16px;
+        }
+
+        .filter-chip {
+            background: #F5F5F5;
+            border-radius: 32px;
+            padding: 8px 16px;
+            font-size: 14px;
+            color: #333;
+            border: 1px solid #E0E0E0;
+        }
+
+        /* header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .search-bar {
+            width: 400px;
+            background: #F5F5F5;
+            border: 1px solid #DDD;
+            border-radius: 40px;
+            padding: 12px 20px;
+            color: #888;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            background: #F0F0F0;
+            border: 1px solid #CCCCCC;
+            border-radius: 8px;
+            padding: 8px 24px;
+            font-size: 14px;
+            cursor: default;
+            color: #111;
+        }
+
+        /* gallery */
+        .gallery {
+            display: flex;
+            gap: 20px;
+            margin: 16px 0;
+        }
+        .gallery-item {
+            width: 200px;
+            height: 150px;
+            background: #E0E0E0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+        }
+
+        /* table */
+        .service-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+        .service-table th, .service-table td {
+            padding: 14px 8px;
+            border-bottom: 1px solid #EEEEEE;
+            text-align: left;
+        }
+        .service-table th {
+            font-weight: 500;
+            color: #555;
+        }
+
+        .price {
+            font-weight: 500;
+        }
+
+        .book-btn {
+            background: #E8E8E8;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 16px;
+            font-size: 12px;
+            cursor: default;
+        }
+
+        /* calculator */
+        .calculator-row {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 16px 0;
+        }
+        .select {
+            background: #F5F5F5;
+            border: 1px solid #DDD;
+            border-radius: 8px;
+            padding: 10px 16px;
+            width: 240px;
+        }
+
+        /* review */
+        .review-item {
+            background: #FAFAFA;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        /* tabs */
+        .tabs {
+            display: flex;
+            gap: 32px;
+            border-bottom: 1px solid #E0E0E0;
+            margin-bottom: 24px;
+        }
+        .tab {
+            padding: 8px 0;
+            font-weight: 500;
+            color: #333;
+            border-bottom: 2px solid transparent;
+        }
+        .tab.active {
+            border-bottom-color: #111;
+        }
+
+        /* forms */
+        .form-field {
+            margin-bottom: 20px;
+        }
+        .form-field label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #444;
+        }
+        .input, textarea {
+            width: 100%;
+            background: #F9F9F9;
+            border: 1px solid #DDD;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 120px;
+        }
+
+        /* rating stars */
+        .stars {
+            display: flex;
+            gap: 8px;
+            font-size: 28px;
+            color: #999;
+            margin: 12px 0;
+        }
+        .star {
+            cursor: default;
+        }
+
+        /* buttons */
+        .btn-large {
+            background: #E0E0E0;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 500;
+            margin: 16px auto;
+            display: inline-block;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        /* spacing helpers */
+        .mt-2 { margin-top: 8px; }
+        .mt-3 { margin-top: 16px; }
+        .mb-2 { margin-bottom: 8px; }
+        .mb-3 { margin-bottom: 16px; }
+        .mb-4 { margin-bottom: 24px; }
+
+        hr {
+            margin: 24px 0;
+            border-color: #EFEFEF;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SCREEN 1: HOME -->
+    <div class="screen">
+        <div class="container">
+            <!-- Header -->
+            <div class="header">
+                <div class="logo">AutoService</div>
+                <div class="search-bar">Поиск автосервиса...</div>
+                <div class="button-group">
+                    <div class="btn">Войти</div>
+                    <div class="btn">Регистрация</div>
+                </div>
+            </div>
+
+            <!-- Filter row -->
+            <div class="filter-row" style="padding-left: 24px; padding-right: 24px;">
+                <span class="filter-chip">Расстоянию ▼</span>
+                <span class="filter-chip">Рейтингу ▼</span>
+                <span class="filter-chip">Услуги ▼</span>
+            </div>
+
+            <!-- Main two-columns -->
+            <div class="two-columns section">
+                <div class="col-left">
+                    <div class="map-placeholder" style="height: 480px;">
+                        <div style="margin-bottom: 8px;">🗺️ Карта</div>
+                        <div style="font-size: 12px; color:#888;">(плейсхолдер карты)</div>
+                        <div style="display: flex; gap: 30px; margin-top: 20px;">
+                            <div style="width: 20px; height: 20px; background: #9e9e9e; border-radius: 50%;"></div>
+                            <div style="width: 20px; height: 20px; background: #9e9e9e; border-radius: 50%;"></div>
+                            <div style="width: 20px; height: 20px; background: #9e9e9e; border-radius: 50%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-right">
+                    <div class="service-card">
+                        <div style="font-weight: 600; font-size: 18px;">АвтоМир</div>
+                        <div style="color:#777; margin: 8px 0;">⭐⭐⭐⭐☆ 4.8 (156)</div>
+                        <div style="color:#999; font-size: 12px;">📍 500 м</div>
+                    </div>
+                    <div class="service-card">
+                        <div style="font-weight: 600; font-size: 18px;">ТехноСервис</div>
+                        <div style="color:#777; margin: 8px 0;">⭐⭐⭐⭐☆ 4.5 (89)</div>
+                        <div style="color:#999; font-size: 12px;">📍 1.2 км</div>
+                    </div>
+                    <div class="service-card">
+                        <div style="font-weight: 600; font-size: 18px;">АвтоДоктор</div>
+                        <div style="color:#777; margin: 8px 0;">⭐⭐⭐⭐⭐ 4.9 (203)</div>
+                        <div style="color:#999; font-size: 12px;">📍 800 м</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 2: SERVICE DETAIL -->
+    <div class="screen">
+        <div class="container">
+            <div class="header" style="border-bottom: none; padding-bottom: 12px;">
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <span style="font-size: 20px;">←</span>
+                    <span style="font-weight: 500;">Назад</span>
+                </div>
+                <div style="font-weight: 600; font-size: 24px;">АвтоМир</div>
+                <div>♡</div>
+            </div>
+            <div class="section">
+                <div class="wireframe-text" style="margin-bottom: 16px;">
+                    📍 ул. Ленина, 15 | 📞 +7 (999) 123-45-67 | 🕐 09:00–21:00 | ⭐ 4.8 (156 отзывов)
+                </div>
+                <!-- gallery -->
+                <div class="gallery">
+                    <div class="gallery-item">Фото 1</div>
+                    <div class="gallery-item">Фото 2</div>
+                    <div class="gallery-item">Фото 3</div>
+                    <div class="gallery-item" style="background:#F0F0F0;">+ ещё</div>
+                </div>
+
+                <!-- services table -->
+                <h3 style="margin-top: 24px;">📋 УСЛУГИ И ЦЕНЫ</h3>
+                <table class="service-table">
+                    <thead>
+                        <tr><th>Услуга</th><th>Цена</th><th></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Замена масла</td><td class="price">1 500 ₽</td><td><span class="book-btn">Записаться</span></td></tr>
+                        <tr><td>Диагностика двигателя</td><td class="price">1 000 ₽</td><td><span class="book-btn">Записаться</span></td></tr>
+                        <tr><td>Шиномонтаж</td><td class="price">2 000 ₽</td><td><span class="book-btn">Записаться</span></td></tr>
+                    </tbody>
+                </table>
+
+                <!-- calculator -->
+                <h3>💰 Калькулятор стоимости</h3>
+                <div class="calculator-row">
+                    <div class="select">Марка: Toyota ▼</div>
+                    <div class="select">Модель: Camry ▼</div>
+                    <div class="btn">Рассчитать</div>
+                </div>
+                <div class="wireframe-text">Примерная стоимость: <strong>2 500 ₽</strong></div>
+
+                <!-- reviews -->
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 32px;">
+                    <h3>⭐ ОТЗЫВЫ (156)</h3>
+                    <div class="btn" style="padding: 6px 16px;">Оставить отзыв</div>
+                </div>
+                <div class="review-item mt-2">
+                    <strong>Иван:</strong> "Отличный сервис!" ⭐⭐⭐⭐⭐
+                </div>
+                <div class="review-item">
+                    <strong>Петр:</strong> "Быстро и качественно" ⭐⭐⭐⭐
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: BOOKING -->
+    <div class="screen">
+        <div class="container">
+            <div class="header" style="border-bottom: none;">
+                <div style="display: flex; gap: 12px;"><span>←</span> Назад</div>
+                <div style="font-weight: 500;">Запись в АвтоМир</div>
+                <div></div>
+            </div>
+            <div class="section">
+                <h4>Шаг 1: Выбор услуги</h4>
+                <div style="display: flex; gap: 32px; margin: 12px 0;">
+                    <span>○ Замена масла</span>
+                    <span>○ Диагностика</span>
+                    <span>○ Шиномонтаж</span>
+                </div>
+
+                <h4>Шаг 2: Выбор специалиста</h4>
+                <div style="display: flex; gap: 32px; margin: 12px 0;">
+                    <span>○ Любой мастер</span>
+                    <span>○ Иванов А.</span>
+                    <span>○ Петров Б.</span>
+                </div>
+
+                <h4>Шаг 3: Выбор даты и времени</h4>
+                <div style="display: flex; gap: 32px; flex-wrap: wrap;">
+                    <div style="background: #F5F5F5; border-radius: 12px; padding: 12px; width: 280px;">
+                        <div style="text-align: center;">📅 ИЮНЬ 2026</div>
+                        <div style="display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; margin-top: 12px;">
+                            <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+                            <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 12px; max-width: 360px;">
+                        <div class="btn" style="width: 80px; text-align: center;">10:00</div>
+                        <div class="btn" style="width: 80px;">11:00</div>
+                        <div class="btn" style="width: 80px;">12:00</div>
+                        <div class="btn" style="width: 80px;">13:00</div>
+                        <div class="btn" style="width: 80px;">14:00</div>
+                        <div class="btn" style="width: 80px;">15:00</div>
+                        <div class="btn" style="width: 80px;">16:00</div>
+                        <div class="btn" style="width: 80px;">17:00</div>
+                    </div>
+                </div>
+
+                <h4 class="mt-3">Шаг 4: Контактные данные</h4>
+                <div class="form-field">
+                    <label>Имя</label>
+                    <div class="input" style="background:#F5F5F5;">Иван Петров</div>
+                </div>
+                <div class="form-field">
+                    <label>Телефон</label>
+                    <div class="input" style="background:#F5F5F5;">+7 (999) 123-45-67</div>
+                </div>
+                <div class="form-field">
+                    <label>Автомобиль</label>
+                    <div class="input" style="background:#F5F5F5;">Toyota Camry</div>
+                </div>
+
+                <div class="center mt-3 mb-2">
+                    <div class="btn-large" style="background: #DDD; width: 280px; text-align: center;">ПОДТВЕРДИТЬ ЗАПИСЬ</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 4: PROFILE -->
+    <div class="screen">
+        <div class="container">
+            <div class="header">
+                <div style="font-weight: 600; font-size: 22px;">Личный кабинет</div>
+                <div class="btn" style="padding: 6px 20px;">Выйти</div>
+            </div>
+            <div class="section">
+                <div style="background:#FAFAFA; border-radius: 16px; padding: 20px; margin-bottom: 24px;">
+                    <div><strong>👤 Иван Петров</strong></div>
+                    <div class="wireframe-text">📞 +7 (999) 123-45-67 | ✉ ivan@mail.ru</div>
+                </div>
+
+                <div class="tabs">
+                    <div class="tab active">История записей</div>
+                    <div class="tab">Избранное</div>
+                    <div class="tab">Настройки</div>
+                </div>
+
+                <h4>ИСТОРИЯ ЗАПИСЕЙ</h4>
+                <table class="service-table">
+                    <thead><tr><th>Дата</th><th>Сервис</th><th>Услуга</th><th>Статус</th></tr></thead>
+                    <tbody>
+                        <tr><td>15.06.2026</td><td>АвтоМир</td><td>Замена масла</td><td>✅ Выполнено</td></tr>
+                        <tr><td>01.06.2026</td><td>ТехноСервис</td><td>Диагностика</td><td>✅ Выполнено</td></tr>
+                        <tr><td>20.05.2026</td><td>АвтоДоктор</td><td>Шиномонтаж</td><td>✅ Выполнено</td></tr>
+                    </tbody>
+                </table>
+
+                <h4 class="mt-3">⭐ МОИ ОТЗЫВЫ</h4>
+                <div class="review-item">АвтоМир: ⭐⭐⭐⭐⭐ "Отличный сервис!"</div>
+                <div class="review-item">ТехноСервис: ⭐⭐⭐⭐ "Быстро, но дороговато"</div>
+
+                <h4 class="mt-3">🔔 Настройка уведомлений</h4>
+                <div style="display: flex; gap: 24px; margin-top: 12px;">
+                    <span>✓ SMS о статусе записи</span>
+                    <span>✓ Push-уведомления</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 5: REVIEW FORM -->
+    <div class="screen">
+        <div class="container">
+            <div class="header" style="border-bottom: none;">
+                <div style="display: flex; gap: 8px;"><span>←</span> Назад</div>
+                <div style="font-weight: 500;">Оставить отзыв</div>
+                <div></div>
+            </div>
+            <div class="section">
+                <div class="wireframe-text mb-2"><strong>Автосервис:</strong> АвтоМир</div>
+                <div class="wireframe-text mb-3"><strong>Дата посещения:</strong> 15.06.2026</div>
+
+                <div>Оценка:</div>
+                <div class="stars">
+                    <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">☆</span>
+                </div>
+
+                <div class="form-field">
+                    <label>Ваш отзыв</label>
+                    <textarea placeholder="Напишите о качестве работы, вежливости..."></textarea>
+                </div>
+
+                <div class="btn" style="display: inline-block; margin-bottom: 24px;">+ Добавить фото</div>
+
+                <div class="center">
+                    <div class="btn-large" style="background: #DDD; width: 280px;">ОТПРАВИТЬ ОТЗЫВ</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; padding: 24px; color: #aaa; font-size: 12px;">
+        ⚡ Визуальное представление вайрфреймов для автосервиса. Размеры: 1920px фрейм, контейнер 1400px. Все элементы серые, без цвета.
+    </div>
+</body>
+</html>

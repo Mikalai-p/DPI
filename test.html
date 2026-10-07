@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Модальное окно записи - Автосервис PRO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #C41E3A;
+            --primary-dark: #9B152C;
+            --primary-light: #FFE5E9;
+            --gray-50: #F7F7F7;
+            --gray-100: #F0F0F0;
+            --gray-200: #E5E5E5;
+            --gray-300: #D4D4D4;
+            --gray-400: #A3A3A3;
+            --gray-500: #737373;
+            --gray-600: #525252;
+            --gray-700: #404040;
+            --gray-800: #262626;
+            --gray-900: #171717;
+            --white: #FFFFFF;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gray-50);
+            color: #1A1A1A;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Кнопка для открытия модалки (демонстрация) */
+        .demo-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-md);
+        }
+
+        .demo-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* ========== МОДАЛЬНОЕ ОКНО ========== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 24px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: var(--shadow-xl);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+            animation: modalSlideIn 0.3s ease forwards;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Заголовок модалки */
+        .modal-header {
+            padding: 24px 28px 16px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-header h2 i {
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        .close-modal {
+            background: var(--gray-100);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--gray-600);
+            font-size: 18px;
+        }
+
+        .close-modal:hover {
+            background: var(--gray-200);
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+
+        /* Информация об услуге/сервисе */
+        .service-info {
+            background: var(--gray-50);
+            margin: 20px 28px;
+            padding: 16px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .service-info i {
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        .service-info-details {
+            flex: 1;
+        }
+
+        .service-info-details .service-name {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .service-info-details .shop-name {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        /* Форма */
+        .modal-form {
+            padding: 0 28px 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        .form-group label i {
+            margin-right: 8px;
+            color: var(--primary);
+            width: 18px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 15px;
+            transition: all 0.2s;
+            background: var(--white);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* Кнопки */
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .btn-submit {
+            flex: 2;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-cancel {
+            flex: 1;
+            background: var(--gray-100);
+            color: var(--gray-700);
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background: var(--gray-200);
+        }
+
+        /* Уведомление об успехе */
+        .success-message {
+            text-align: center;
+            padding: 32px;
+        }
+
+        .success-message i {
+            font-size: 64px;
+            color: #4CAF50;
+            margin-bottom: 16px;
+        }
+
+        .success-message h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .success-message p {
+            color: var(--gray-500);
+            margin-bottom: 24px;
+        }
+
+        /* Адаптив для мобильных */
+        @media (max-width: 560px) {
+            .modal-content {
+                width: 95%;
+                margin: 16px;
+            }
+            
+            .modal-header {
+                padding: 20px;
+            }
+            
+            .service-info {
+                margin: 16px 20px;
+            }
+            
+            .modal-form {
+                padding: 0 20px 20px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Кнопка для демонстрации -->
+    <button class="demo-btn" id="openModalBtn">
+        <i class="fas fa-calendar-check"></i> Записаться на услугу
+    </button>
+
+    <!-- Модальное окно -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-content">
+            <!-- Состояние формы (по умолчанию) -->
+            <div id="formState">
+                <div class="modal-header">
+                    <h2>
+                        <i class="fas fa-pen-alt"></i>
+                        Запись на услугу
+                    </h2>
+                    <button class="close-modal" id="closeModalBtn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Информация об услуге и автосервисе -->
+                <div class="service-info">
+                    <i class="fas fa-wrench"></i>
+                    <div class="service-info-details">
+                        <div class="service-name" id="selectedServiceName">Компьютерная диагностика</div>
+                        <div class="shop-name" id="selectedShopName">Автосервис «Профи-Авто»</div>
+                    </div>
+                </div>
+
+                <!-- Форма записи -->
+                <form id="bookingForm" class="modal-form">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Ваше имя</label>
+                        <input type="text" id="clientName" placeholder="Иван Иванов" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-phone"></i> Телефон</label>
+                            <input type="tel" id="clientPhone" placeholder="+375 (29) 111-22-33" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-envelope"></i> Email</label>
+                            <input type="email" id="clientEmail" placeholder="ivan@example.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-car"></i> Марка и модель авто</label>
+                        <input type="text" id="clientCar" placeholder="Toyota Camry, 2019" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar"></i> Дата</label>
+                            <input type="date" id="bookingDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-clock"></i> Время</label>
+                            <select id="bookingTime" required>
+                                <option value="">Выберите время</option>
+                                <option value="09:00">09:00</option>
+                                <option value="10:00">10:00</option>
+                                <option value="11:00">11:00</option>
+                                <option value="12:00">12:00</option>
+                                <option value="13:00">13:00</option>
+                                <option value="14:00">14:00</option>
+                                <option value="15:00">15:00</option>
+                                <option value="16:00">16:00</option>
+                                <option value="17:00">17:00</option>
+                                <option value="18:00">18:00</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-comment"></i> Комментарий (необязательно)</label>
+                        <input type="text" id="clientComment" placeholder="Дополнительная информация">
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" id="cancelBtn">Отмена</button>
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-check"></i> Записаться
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Состояние успеха (скрыто) -->
+            <div id="successState" style="display: none;">
+                <div class="success-message">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Заявка принята!</h3>
+                    <p>Спасибо за доверие! Наш менеджер свяжется с вами в ближайшее время для подтверждения записи.</p>
+                    <button class="btn-submit" id="successCloseBtn" style="margin: 0 auto; min-width: 160px;">
+                        <i class="fas fa-check"></i> Отлично
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Получаем параметры из URL (если передаются через GET)
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                service: params.get('service') || 'Компьютерная диагностика',
+                shop: params.get('shop') || 'Автосервис «Профи-Авто»'
+            };
+        }
+
+        // Элементы DOM
+        const modal = document.getElementById('bookingModal');
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const successCloseBtn = document.getElementById('successCloseBtn');
+        const formState = document.getElementById('formState');
+        const successState = document.getElementById('successState');
+        const bookingForm = document.getElementById('bookingForm');
+        const selectedServiceNameSpan = document.getElementById('selectedServiceName');
+        const selectedShopNameSpan = document.getElementById('selectedShopName');
+
+        // Устанавливаем текущую дату в поле date (минимальная дата - сегодня)
+        const dateInput = document.getElementById('bookingDate');
+        if (dateInput) {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            dateInput.min = `${yyyy}-${mm}-${dd}`;
+            dateInput.value = `${yyyy}-${mm}-${dd}`;
+        }
+
+        // Функция открытия модалки с обновлением информации
+        function openModal(serviceName, shopName) {
+            if (serviceName) selectedServiceNameSpan.textContent = serviceName;
+            if (shopName) selectedShopNameSpan.textContent = shopName;
+            
+            formState.style.display = 'block';
+            successState.style.display = 'none';
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Функция закрытия модалки
+        function closeModal() {
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+            // Сбрасываем форму
+            bookingForm.reset();
+            formState.style.display = 'block';
+            successState.style.display = 'none';
+            // Восстанавливаем дату
+            if (dateInput) {
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                dateInput.value = `${yyyy}-${mm}-${dd}`;
+            }
+        }
+
+        // Отправка формы
+        function submitForm(e) {
+            e.preventDefault();
+            
+            // Собираем данные формы
+            const formData = {
+                name: document.getElementById('clientName').value,
+                phone: document.getElementById('clientPhone').value,
+                email: document.getElementById('clientEmail').value,
+                car: document.getElementById('clientCar').value,
+                date: document.getElementById('bookingDate').value,
+                time: document.getElementById('bookingTime').value,
+                comment: document.getElementById('clientComment').value,
+                service: selectedServiceNameSpan.textContent,
+                shop: selectedShopNameSpan.textContent
+            };
+            
+            // Простая валидация
+            if (!formData.name || !formData.phone || !formData.email || !formData.car || !formData.date || !formData.time) {
+                alert('Пожалуйста, заполните все обязательные поля');
+                return;
+            }
+            
+            if (!formData.email.includes('@')) {
+                alert('Введите корректный email');
+                return;
+            }
+            
+            // Здесь можно отправить данные на сервер через fetch
+            console.log('Данные записи:', formData);
+            
+            // Показываем состояние успеха
+            formState.style.display = 'none';
+            successState.style.display = 'block';
+        }
+
+        // Обработчики событий
+        openModalBtn.addEventListener('click', () => {
+            const params = getUrlParams();
+            openModal(params.service, params.shop);
+        });
+        
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+        
+        if (successCloseBtn) {
+            successCloseBtn.addEventListener('click', closeModal);
+        }
+        
+        // Закрытие по клику на оверлей
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+        
+        // Закрытие по Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('show')) closeModal();
+        });
+        
+        bookingForm.addEventListener('submit', submitForm);
+        
+        // Маска для телефона (простая)
+        const phoneInput = document.getElementById('clientPhone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', (e) => {
+                let value = e.target.value.replace(/[^\d+]/g, '');
+                if (!value.startsWith('+')) {
+                    if (value.startsWith('375')) value = '+' + value;
+                    else if (value.length > 0 && !value.startsWith('+')) value = '+' + value;
+                }
+                e.target.value = value;
+            });
+        }
+    </script>
+</body>
+</html>

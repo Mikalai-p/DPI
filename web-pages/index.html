@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>AutoMaster — онлайн-запись в автосервис</title>
+    <!-- Leaflet CSS + JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Собственные стили -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="nav-container">
+        <div class="logo"><i class="fas fa-car"></i> AutoMaster</div>
+        <div class="nav-links">
+            <a href="#">Главная</a>
+            <a href="#map-section">Карта</a>
+            <a href="#services">СТО</a>
+            <a href="#account">Личный кабинет</a>
+        </div>
+        <div class="btn-outline" id="demoLoginBtn"><i class="fas fa-user-circle"></i> Демо-вход</div>
+    </div>
+</header>
+
+<main class="container">
+    <!-- Карта + фильтры -->
+    <div class="map-filters-row" id="map-section">
+        <div class="map-box">
+            <div id="map"></div>
+        </div>
+        <div class="filters-side">
+            <h3><i class="fas fa-sliders-h"></i> Фильтры</h3>
+            <div class="filter-group">
+                <label>Тип услуги</label>
+                <div class="service-chips" id="serviceFilterChips">
+                    <span class="chip active" data-service="all">Все</span>
+                    <span class="chip" data-service="Диагностика">Диагностика</span>
+                    <span class="chip" data-service="Замена масла">Замена масла</span>
+                    <span class="chip" data-service="Ремонт подвески">Ремонт подвески</span>
+                    <span class="chip" data-service="Шиномонтаж">Шиномонтаж</span>
+                </div>
+            </div>
+            <div class="filter-group">
+                <label>Рейтинг: <span id="ratingVal">3.5</span>+</label>
+                <input type="range" id="ratingFilter" min="0" max="5" step="0.5" value="3.5">
+            </div>
+            <div class="filter-group">
+                <label>Поиск по названию</label>
+                <input type="text" id="searchName" placeholder="Название СТО...">
+            </div>
+            <button class="btn-primary" id="resetFilters" style="width:100%; margin-top:10px;">Сбросить фильтры</button>
+        </div>
+    </div>
+
+    <!-- Список автосервисов -->
+    <div class="section-title" id="services">
+        <i class="fas fa-wrench"></i> Доступные автосервисы
+    </div>
+    <div class="services-grid" id="servicesGrid"></div>
+
+    <!-- Калькулятор + отзывы + личный кабинет -->
+    <div class="features-grid">
+        <div class="feature-card">
+            <h3><i class="fas fa-calculator"></i> Калькулятор стоимости</h3>
+            <div class="calc-row">
+                <label>Услуга</label>
+                <select id="calcService">
+                    <option value="Диагностика">Диагностика двигателя — от 1500 руб</option>
+                    <option value="Замена масла">Замена масла — от 1200 руб</option>
+                    <option value="Ремонт подвески">Ремонт подвески — от 2500 руб</option>
+                    <option value="Шиномонтаж">Шиномонтаж — от 800 руб</option>
+                </select>
+            </div>
+            <div class="calc-row">
+                <label>Марка авто</label>
+                <input type="text" id="carModel" placeholder="Например: Toyota Camry" value="Hyundai Solaris">
+            </div>
+            <div class="calc-row">
+                <button class="btn-primary" id="calcPriceBtn">Рассчитать</button>
+                <div style="margin-top: 15px;"><span class="calc-price" id="calcResult">—</span> <span style="font-weight:500;">примерная стоимость</span></div>
+                <small>*Окончательная цена уточняется в сервисе</small>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <h3><i class="fas fa-star"></i> Отзывы клиентов</h3>
+            <div id="reviewsContainer"></div>
+            <div style="margin-top: 12px;">
+                <textarea id="newReviewText" rows="2" placeholder="Оставьте отзыв..." style="width:100%; border-radius:16px; padding:8px;"></textarea>
+                <div style="display:flex; gap:8px; margin-top:8px;">
+                    <select id="newRating"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select>
+                    <button class="btn-secondary" id="addReviewBtn">Добавить отзыв</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-card" id="account">
+            <h3><i class="fas fa-user"></i> Личный кабинет</h3>
+            <p><strong>Демо-пользователь:</strong> Алексей В.</p>
+            <div><i class="fas fa-calendar-alt"></i> <strong>Предстоящие записи</strong></div>
+            <div id="upcomingBookingsList" class="booking-list"></div>
+            <div style="margin-top: 12px;"><i class="fas fa-history"></i> <strong>История обслуживаний</strong></div>
+            <div id="historyBookingsList" class="booking-list"></div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>AutoMaster — удобный поиск СТО, онлайн-запись и прозрачные цены. © 2025</p>
+</footer>
+
+<!-- Модальное окно записи -->
+<div id="bookingModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3><i class="fas fa-calendar-check"></i> Онлайн-запись</h3>
+        <div id="modalServiceName" style="font-weight:600; margin:10px 0;"></div>
+        <form id="bookingForm">
+            <input type="hidden" id="bookingServiceId">
+            <div class="calc-row"><label>Ваше имя</label><input type="text" id="clientName" required placeholder="Имя"></div>
+            <div class="calc-row"><label>Телефон</label><input type="tel" id="clientPhone" required placeholder="+375 XX XXX-XX-XX"></div>
+            <div class="calc-row"><label>Услуга</label><input type="text" id="modalServiceSelect" readonly></div>
+            <div class="calc-row"><label>Дата</label><input type="date" id="bookingDate" required></div>
+            <div class="calc-row"><label>Время</label><input type="time" id="bookingTime" required></div>
+            <div class="calc-row"><label>Автомобиль</label><input type="text" id="bookingCar" placeholder="Марка и модель"></div>
+            <button type="submit" class="btn-primary" style="width:100%; margin-top: 12px;">Подтвердить запись</button>
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

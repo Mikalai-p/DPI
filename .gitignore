@@ -1,0 +1,19 @@
+# Временные файлы Word/Office
+~$*
+~WRL*.tmp
+*.tmp
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Логи
+*.log
+
+# Node.js (на всякий случай)
+node_modules/
