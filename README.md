@@ -8,6 +8,6 @@
 
 ## Автор
 
-Меня зовут Николай, вот мой GitHub: https://github.com/Mikalai-p
+Николай, вот мой GitHub: https://github.com/Mikalai-p
 
-Проект учебный.
+Учебные работы и материалы.
